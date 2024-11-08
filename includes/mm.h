@@ -30,10 +30,13 @@ typedef struct	t_board
 	s_pawn	*color_clues[NB_ROUNDS][NB_PAWNS];
 	s_pawn	*user_pawns[NB_ROUNDS][NB_PAWNS];
 	s_pawn	*color_pos_clues[NB_ROUNDS][NB_PAWNS];
+	int		round;
 }	s_board;
 
 void	init_board(s_board *board);
 void	show_board(s_board *board);
 void	free_board(s_board *board);
+
+void	start();
 
 #endif

@@ -48,6 +48,7 @@ void	init_board(s_board *board)
 		}
 		i++;
 	}
+	board->round = 0;
 }
 
 void	free_board(s_board *board)

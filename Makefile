@@ -2,7 +2,7 @@ CC = cc
 SRC_DIR = srcs/
 INCLUDES_DIR = includes/
 C_FLAGS = -Wall -Wextra -Werror
-SRCS = ${SRC_DIR}utils/*.c ${SRC_DIR}main.c ${SRC_DIR}board.c
+SRCS = ${SRC_DIR}utils/*.c ${SRC_DIR}main.c ${SRC_DIR}board.c ${SRC_DIR}game_engine.c
 NAME = MasterMind
 
 all : ${NAME}
