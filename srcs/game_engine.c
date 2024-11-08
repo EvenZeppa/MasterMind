@@ -15,10 +15,52 @@ void	IA_pawns(s_pawn ia_pawns[NB_PAWNS])
 	}
 }
 
-int	is_user_input_validated(char *input)
+int	is_str_valable_color(char *str)
 {
-	(void) input;
+	while (*str)
+	{
+		if (*str != '1' &&
+			*str != '2' &&
+			*str != '3' &&
+			*str != '4' &&
+			*str != '5' &&
+			*str != '6' &&
+			*str != '7')
+			return (0);
+		str++;
+	}
 	return (1);
+}
+
+void	user_input(s_board *board, char *input)
+{
+	int	i;
+	int	can_validate;
+
+	can_validate = 0;
+	while (1)
+	{
+		if (can_validate)
+			printf("Type " GREEN_COLOR "y" WHITE_COLOR " to validate your choice : ");
+		scanf("%s", input);
+		if (can_validate && input[0] == 'y')
+			break;
+		if (ft_strlen(input) != NB_PAWNS)
+			printf(RED_COLOR "ERROR" WHITE_COLOR " : Number digits = %d\n", NB_PAWNS);
+		else if (!is_str_valable_color(input))
+			printf(RED_COLOR "ERROR" WHITE_COLOR " : Valable inputs = (1 -> 7)\n");
+		else
+		{
+			i = 0;
+			while (i < NB_PAWNS)
+			{
+				board->user_pawns[board->round][i]->color = INT_TO_COLOR(input[i] - '0');
+				i++;
+			}
+			can_validate = 1;
+		}
+		show_board(board);
+	}
 }
 
 int	board_resolve(s_board *board, s_pawn ia_pawns[NB_PAWNS])
@@ -39,18 +81,19 @@ void	run(s_board *board, s_pawn ia_pawns[NB_PAWNS])
 	int		is_win;
 
 	is_win = 0;
-	while (board->round++ < NB_ROUNDS)
+	while (board->round < NB_ROUNDS)
 	{
 		show_board(board);
 
 		ft_strlcpy(input, "0000", NB_PAWNS + 1);
-		while (!is_user_input_validated(input))
-			show_board(board);
+
+		user_input(board, input);
 
 		is_win = board_resolve(board, ia_pawns);
 
 		if (is_win)
 			break;
+		board->round++;
 	}
 	end(board);
 }
