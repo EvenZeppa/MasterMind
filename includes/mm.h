@@ -3,6 +3,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <time.h>
 
 # define PAWN_CHR "\u2588"
 # define DIVIDER_CHR "\u2503"
@@ -18,6 +19,17 @@
 
 # define NB_ROUNDS 12
 # define NB_PAWNS 4
+
+# define INT_TO_COLOR(i)	( \
+							(i) == 0 ? BLACK_COLOR :\
+							(i) == 1 ? RED_COLOR :\
+							(i) == 2 ? GREEN_COLOR :\
+							(i) == 3 ? YELLOW_COLOR :\
+							(i) == 4 ? BLUE_COLOR :\
+							(i) == 5 ? PURPLE_COLOR :\
+							(i) == 6 ? CYAN_COLOR :\
+							(i) == 7 ? WHITE_COLOR : "\033[0m" \
+							)
 
 typedef struct	t_pawn
 {
