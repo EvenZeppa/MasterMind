@@ -50,6 +50,28 @@ void	init_board(s_board *board)
 	}
 }
 
+void	free_board(s_board *board)
+{
+
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < NB_ROUNDS)
+	{
+		j = 0;
+		while (j < NB_PAWNS)
+		{
+			free(board->color_clues[i][j]);
+			free(board->user_pawns[i][j]);
+			free(board->color_pos_clues[i][j]);
+			j++;
+		}
+		i++;
+	}
+	free(board);
+}
+
 void	show_board(s_board *board)
 {
 	int		i;

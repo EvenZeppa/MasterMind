@@ -34,5 +34,6 @@ typedef struct	t_board
 
 void	init_board(s_board *board);
 void	show_board(s_board *board);
+void	free_board(s_board *board);
 
 #endif

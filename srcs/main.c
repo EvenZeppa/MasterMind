@@ -1,4 +1,5 @@
 #include "../includes/mm.h"
+#include "../includes/utils.h"
 
 int	main(void)
 {
@@ -10,4 +11,12 @@ int	main(void)
 
 	init_board(board);
 	show_board(board);
+
+	printf("\n\n");
+
+	board->user_pawns[7][3]->color = ft_strdup(RED_COLOR);
+
+	show_board(board);
+
+	free_board(board);
 }
