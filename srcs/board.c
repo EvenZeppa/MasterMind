@@ -41,9 +41,9 @@ void	init_board(s_board *board)
 		j = 0;
 		while (j < NB_PAWNS)
 		{
-			board->color_clues[i][j] = create_pawn(WHITE_COLOR, j);
-			board->user_pawns[i][j] = create_pawn(WHITE_COLOR, j);
-			board->color_pos_clues[i][j] = create_pawn(WHITE_COLOR, j);
+			board->color_clues[i][j] = create_pawn(BLACK_COLOR, j);
+			board->user_pawns[i][j] = create_pawn(BLACK_COLOR, j);
+			board->color_pos_clues[i][j] = create_pawn(BLACK_COLOR, j);
 			j++;
 		}
 		i++;

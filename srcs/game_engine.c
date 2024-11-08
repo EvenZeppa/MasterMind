@@ -1,7 +1,7 @@
 #include "../includes/mm.h"
 #include "../includes/utils.h"
 
-void	IA_pawns(s_pawn ia_pawns[NB_PAWNS])
+void	IA_pawns(s_pawn *ia_pawns)
 {
 	int	i;
 
@@ -63,10 +63,41 @@ void	user_input(s_board *board, char *input)
 	}
 }
 
-int	board_resolve(s_board *board, s_pawn ia_pawns[NB_PAWNS])
+int	board_resolve(s_board *board, s_pawn *ia_pawns)
 {
-	(void) board;
-	(void) ia_pawns;
+	int	c;
+	int	cp;
+	int	i;
+	int	j;
+
+	c = NB_PAWNS - 1;
+	cp = 0;
+	i = 0;
+	while (i < NB_PAWNS)
+	{
+		if (board->user_pawns[board->round][i]->position == ia_pawns[i].position &&
+			memcmp(board->user_pawns[board->round][i]->color, ia_pawns[i].color, 8) == 0)
+		{
+			board->color_pos_clues[board->round][cp]->color = RED_COLOR;
+			i++;
+			cp++;
+			continue;
+		}
+		j = 0;
+		while (j < NB_PAWNS)
+		{
+			if (memcmp(board->user_pawns[board->round][i]->color, ia_pawns[j].color, 8) == 0)
+			{
+				board->color_clues[board->round][c]->color = WHITE_COLOR;
+				c--;
+				break;
+			}
+			j++;
+		}
+		i++;
+	}
+	if (cp == NB_PAWNS - 1)
+		return (1);
 	return (0);
 }
 
@@ -75,17 +106,19 @@ void	end(s_board *board)
 	(void) board;
 }
 
-void	run(s_board *board, s_pawn ia_pawns[NB_PAWNS])
+void	run(s_board *board, s_pawn *ia_pawns)
 {
-	char	input[NB_PAWNS];
+	char	*input;
 	int		is_win;
 
 	is_win = 0;
+	input = malloc(sizeof(char) * 128);
 	while (board->round < NB_ROUNDS)
 	{
-		show_board(board);
+		printf("TEST : %s" PAWN_CHR " %s" PAWN_CHR " %s" PAWN_CHR " %s" PAWN_CHR WHITE_COLOR "\n",
+			ia_pawns[0].color, ia_pawns[1].color, ia_pawns[2].color, ia_pawns[3].color);
 
-		ft_strlcpy(input, "0000", NB_PAWNS + 1);
+		show_board(board);
 
 		user_input(board, input);
 
@@ -95,15 +128,18 @@ void	run(s_board *board, s_pawn ia_pawns[NB_PAWNS])
 			break;
 		board->round++;
 	}
+	show_board(board);
+
 	end(board);
 }
 
 void	start()
 {
 	s_board	*board;
-	s_pawn	ia_pawns[NB_PAWNS];
+	s_pawn	*ia_pawns;
 
 	board = malloc(sizeof(s_board));
+	ia_pawns = malloc(sizeof(s_pawn) * NB_PAWNS);
 	if (!board)
 		exit(1);
 	init_board(board);
@@ -111,5 +147,5 @@ void	start()
 
 	run(board, ia_pawns);
 
-	// free_board(board);
+	free_board(board);
 }
