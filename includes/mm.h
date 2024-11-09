@@ -28,7 +28,7 @@
 							(i) == 4 ? BLUE_COLOR :\
 							(i) == 5 ? PURPLE_COLOR :\
 							(i) == 6 ? CYAN_COLOR :\
-							(i) == 7 ? WHITE_COLOR : "\033[0m" \
+							(i) == 7 ? WHITE_COLOR : "\033[0;37m" \
 							)
 
 typedef struct	t_pawn

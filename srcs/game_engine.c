@@ -40,8 +40,20 @@ void	user_input(s_board *board, char *input)
 	can_validate = 0;
 	while (1)
 	{
+		printf( "\n"
+			RED_COLOR PAWN_CHR " " 
+			GREEN_COLOR PAWN_CHR " "
+			YELLOW_COLOR PAWN_CHR " "
+			BLUE_COLOR PAWN_CHR " "
+			PURPLE_COLOR PAWN_CHR " "
+			CYAN_COLOR PAWN_CHR " "
+			WHITE_COLOR PAWN_CHR "\n");
+		printf("1 2 3 4 5 6 7\n");
+
 		if (can_validate)
-			printf("Type " GREEN_COLOR "y" WHITE_COLOR " to validate your choice : ");
+			printf("Type " GREEN_COLOR "y" WHITE_COLOR " to validate your choice or another combination : ");
+		else
+			printf("Type a combination : ");
 		scanf("%s", input);
 		if (can_validate && input[0] == 'y')
 			break;
@@ -69,6 +81,7 @@ int	board_resolve(s_board *board, s_pawn *ia_pawns)
 	int	cp;
 	int	i;
 	int	j;
+	int	states[NB_PAWNS] = {0};
 
 	c = NB_PAWNS - 1;
 	cp = 0;
@@ -76,18 +89,23 @@ int	board_resolve(s_board *board, s_pawn *ia_pawns)
 	while (i < NB_PAWNS)
 	{
 		if (board->user_pawns[board->round][i]->position == ia_pawns[i].position &&
-			memcmp(board->user_pawns[board->round][i]->color, ia_pawns[i].color, 8) == 0)
+			memcmp(board->user_pawns[board->round][i]->color, ia_pawns[i].color, 7) == 0)
 		{
+			states[i] = 1;
 			board->color_pos_clues[board->round][cp]->color = RED_COLOR;
-			i++;
 			cp++;
-			continue;
 		}
+		i++;
+	}
+	i = 0;
+	while (i < NB_PAWNS)
+	{
 		j = 0;
 		while (j < NB_PAWNS)
 		{
-			if (memcmp(board->user_pawns[board->round][i]->color, ia_pawns[j].color, 8) == 0)
+			if (i != j && states[j] == 0 && memcmp(board->user_pawns[board->round][i]->color, ia_pawns[j].color, 8) == 0)
 			{
+				states[j] = 1;
 				board->color_clues[board->round][c]->color = WHITE_COLOR;
 				c--;
 				break;
@@ -96,14 +114,27 @@ int	board_resolve(s_board *board, s_pawn *ia_pawns)
 		}
 		i++;
 	}
-	if (cp == NB_PAWNS - 1)
+	if (cp == NB_PAWNS)
 		return (1);
 	return (0);
 }
 
-void	end(s_board *board)
+void	end(s_board *board, s_pawn *ia_pawns)
 {
-	(void) board;
+	int	i;
+	
+	if (board->round == NB_ROUNDS)
+		printf(RED_COLOR "You left !!!\n" WHITE_COLOR);
+	else
+		printf(GREEN_COLOR "You won !!!\n" WHITE_COLOR);
+	printf("The combination was : " );
+	i = 0;
+	while (i < NB_PAWNS)
+	{
+		printf("%s" PAWN_CHR " ", ia_pawns[i].color);
+		i++;
+	}
+	printf(WHITE_COLOR);
 }
 
 void	run(s_board *board, s_pawn *ia_pawns)
@@ -115,9 +146,6 @@ void	run(s_board *board, s_pawn *ia_pawns)
 	input = malloc(sizeof(char) * 128);
 	while (board->round < NB_ROUNDS)
 	{
-		printf("TEST : %s" PAWN_CHR " %s" PAWN_CHR " %s" PAWN_CHR " %s" PAWN_CHR WHITE_COLOR "\n",
-			ia_pawns[0].color, ia_pawns[1].color, ia_pawns[2].color, ia_pawns[3].color);
-
 		show_board(board);
 
 		user_input(board, input);
@@ -127,10 +155,11 @@ void	run(s_board *board, s_pawn *ia_pawns)
 		if (is_win)
 			break;
 		board->round++;
+		printf(BLUE_COLOR "\n=====================\n\n");
 	}
 	show_board(board);
 
-	end(board);
+	end(board, ia_pawns);
 }
 
 void	start()

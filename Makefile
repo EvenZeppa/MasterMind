@@ -1,4 +1,4 @@
-CC = cc
+CC = gcc
 SRC_DIR = srcs/
 INCLUDES_DIR = includes/
 C_FLAGS = -Wall -Wextra -Werror
